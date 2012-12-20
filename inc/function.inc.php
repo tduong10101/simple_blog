@@ -36,6 +36,7 @@ function retrieveEntries($db, $id=NULL)
 	}
 	if (!isset($e)){
 		$e = array('entry'=>"There is no entry! Please post something!");
+		$fulldisp=2;
 	}
 	array_push($e, $fulldisp);
 	return $e;			

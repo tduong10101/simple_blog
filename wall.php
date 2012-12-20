@@ -56,6 +56,7 @@
 					
 					foreach($e as $entries){?><div class="entry">
 					<p><?php 
+					print_r($entries);
 					echo $entries['entry'];?>
 					
 					</p>
