@@ -14,13 +14,13 @@ if($_SERVER['REQUEST_METHOD']=='POST'
 	$stmt = $db->prepare($sql);
 	$stmt->execute(array($_POST['id']));
 	$stmt->closeCursor();
-	header('Location: ../wall.php');
+	header('Location: ../');
 	exit;
 }
 // If both conditions aren't met, sends the user back to the main page
 else
 {
-header('Location: ../wall.php');
+header('Location: ../');
 exit;
 }
 ?>

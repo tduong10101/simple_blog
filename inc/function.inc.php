@@ -1,43 +1,73 @@
 <?php
-function retrieveEntries($db, $id=NULL)
-{
-	/*
-	* If an entry ID was supplied, load the associated entry
-	*/
-	if(isset($id))
-	{
-		// Load specified entry
-		$sql="SELECT entry, id FROM wall WHERE id =? LIMIT 1";;
-		$stm = $db->prepare($sql);
-		$stm->execute(array($_GET['id']));
-		
-		$e = $stm->fetch();
-		$fulldisp=1;
-		// Set the fulldisp flag for single entry
-		if (!is_array($e)){
-			$e=array('entry'=>"Invalid id");
-			$fulldisp=2;
+function retrieveEntries($db, $id=NULL, $page)
+{	
+	$dis = array('allWall'=>0,'singleWall'=>1, 'invalid'=>2,'about'=>3,'noPage'=>4);
+	$sql = "SELECT page FROM wall WHERE page=?";
+	$stm=$db->prepare($sql);
+	$stm->execute(array($page));
+	$p = $stm->fetch();
+	
+	if ($p['page']==''){
+		$e = array('entry'=>"no page exist");
+		$fulldisp=$dis['noPage'];
+	}
+	
+	else{
+		/*
+		* If an entry ID was supplied, load the associated entry
+		*/
+		if(isset($id))
+		{
+			// Load specified entry
+			$sql="SELECT entry, id FROM wall WHERE id =? LIMIT 1";;
+			$stm = $db->prepare($sql);
+			$stm->execute(array($_GET['id']));
+			
+			$e = $stm->fetch();
+			
+			$fulldisp=$dis['singleWall'];
+			// Set the fulldisp flag for single entry
+			if ($e==''){
+				$e=array('entry'=>"Invalid id");
+				$fulldisp=$dis['invalid'];
+			}
+			
 		}
-		
-	}
-	/*
-	* If no entry ID was supplied, load all entry titles
-	*/
-	else
-	{
-		// Load all entry
-		$sql="SELECT entry, id FROM wall ORDER BY created DESC";
-		foreach($db->query($sql)as $row){
-			$e[] = array ('entry'=>$row['entry'],
-							'id'=>$row['id']);
+		/*
+		* If no entry ID was supplied, load all entry titles
+		*/
+		else{	
+			if ($p['page']=="about"){
+				$fulldisp =$dis['about'];
+				
+				// Load all entry
+				$sql="SELECT entry, id FROM wall WHERE page=? ORDER BY created ASC";
+				$stm = $db->prepare($sql);
+				$stm->execute(array($page));
+				foreach($stm as $row){
+					$e[] = array ('entry'=>$row['entry'],
+									'id'=>$row['id']);
+				}
+			}elseif ($p['page']=="index"){
+				$fulldisp =$dis['allWall'];
+			
+				// Load all entry
+				$sql="SELECT entry, id FROM wall WHERE page=? ORDER BY created DESC";
+				$stm = $db->prepare($sql);
+				$stm->execute(array($page));
+				foreach($stm as $row){
+					$e[] = array ('entry'=>$row['entry'],
+									'id'=>$row['id']);
+				}
+			
+			}
 		}
-		// Set the fulldisp flag for multiple entries
-		$fulldisp = 0;
+		if (!isset($e)){
+			$e = array('entry'=>"There is no entry! Please post something!");
+			$fulldisp=$dis['invalid'];
+		}
 	}
-	if (!isset($e)){
-		$e = array('entry'=>"There is no entry! Please post something!");
-		$fulldisp=2;
-	}
+	
 	array_push($e, $fulldisp);
 	return $e;			
 }
