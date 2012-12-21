@@ -12,7 +12,7 @@
 		<h3 class="header">tBlog</h3>
 		<div class="navi">
 			<ul class="navi" >
-				<li class="navi"> <a class="navi" href="/simple_blog/?page=about">About Author</a>
+				<li class="navi"> <a class="navi" href="/simple_blog/?page=user">About Author</a>
 				<li class="navi">|
 				<li class="navi"> <a class="navi" href="/simple_blog/">Wall</a>
 				<li class="navi">|
@@ -44,14 +44,15 @@
 				
 				$fulldis = array_pop($e);
 				if ($fulldis==$dis['noPage']){
-					?><h1><?php echo $e['entry']?></h1><?php  	
+					?><div class="container"><h1><?php echo $e['entry']?></h1></div><?php  	
 				} elseif ($fulldis==$dis['about']){
 					
-					?><h1>About Author</h1>
-					<br>
+					?><div class="container"><h1>About Author</h1></div>
 					<?php 
 					foreach($e as $entries){ ?>
-						<div class="container"><p><br><?php echo ($entries['entry']); ?></p></div><?php
+						<div class="container"><p><br>Name: <?php echo $entries['name']; ?>
+						<br>Address: <?php echo $entries['address']; ?>
+						<br>Education: <?php echo $entries['education']; ?></p></div><?php
 					} 
 				}
 				else{

@@ -2,14 +2,16 @@
 function retrieveEntries($db, $id=NULL, $page)
 {	
 	$dis = array('allWall'=>0,'singleWall'=>1, 'invalid'=>2,'about'=>3,'noPage'=>4);
-	$sql = "SELECT page FROM wall WHERE page=?";
-	$stm=$db->prepare($sql);
-	$stm->execute(array($page));
-	$p = $stm->fetch();
+	if ($page=='index'){
+		$table='wall';
+	}else {
+		$table=$page;
+	}
 	
-	if ($p['page']==''){
-		$e = array('entry'=>"no page exist");
-		$fulldisp=$dis['noPage'];
+	$sql = "SELECT id FROM ".$table;
+	if (!$db->query($sql)){
+		$e=array('entry'=>"This page is not exist");
+				$fulldisp=$dis['noPage'];
 	}
 	
 	else{
@@ -19,7 +21,7 @@ function retrieveEntries($db, $id=NULL, $page)
 		if(isset($id))
 		{
 			// Load specified entry
-			$sql="SELECT entry, id FROM wall WHERE id =? LIMIT 1";;
+			$sql="SELECT entry, id FROM ".$table." WHERE id =? LIMIT 1";;
 			$stm = $db->prepare($sql);
 			$stm->execute(array($_GET['id']));
 			
@@ -37,25 +39,23 @@ function retrieveEntries($db, $id=NULL, $page)
 		* If no entry ID was supplied, load all entry titles
 		*/
 		else{	
-			if ($p['page']=="about"){
+			
+			if ($page=="user"){
 				$fulldisp =$dis['about'];
 				
 				// Load all entry
-				$sql="SELECT entry, id FROM wall WHERE page=? ORDER BY created ASC";
-				$stm = $db->prepare($sql);
-				$stm->execute(array($page));
-				foreach($stm as $row){
-					$e[] = array ('entry'=>$row['entry'],
-									'id'=>$row['id']);
+				$sql="SELECT * FROM ".$table;
+				
+				foreach($db->query($sql) as $row){
+					$e[] = $row;
 				}
-			}elseif ($p['page']=="index"){
+			}elseif ($page=="index"){
 				$fulldisp =$dis['allWall'];
 			
 				// Load all entry
-				$sql="SELECT entry, id FROM wall WHERE page=? ORDER BY created DESC";
-				$stm = $db->prepare($sql);
-				$stm->execute(array($page));
-				foreach($stm as $row){
+				$sql="SELECT entry, id FROM ".$table." ORDER BY created DESC";
+				
+				foreach($db->query($sql) as $row){
 					$e[] = array ('entry'=>$row['entry'],
 									'id'=>$row['id']);
 				}
