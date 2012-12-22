@@ -52,7 +52,8 @@
 					foreach($e as $entries){ ?>
 						<div class="container"><p><br>Name: <?php echo $entries['name']; ?>
 						<br>Address: <?php echo $entries['address']; ?>
-						<br>Education: <?php echo $entries['education']; ?></p></div><?php
+						<br>Education: <?php echo $entries['education']; ?></p>
+						<br>About me: <br><?php echo $entries['about']; ?></p></div><?php
 					} 
 				}
 				else{
