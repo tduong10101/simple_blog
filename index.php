@@ -15,8 +15,6 @@
 				<li class="navi"> <a class="navi" href="/simple_blog/user">About Author</a>
 				<li class="navi">|
 				<li class="navi"> <a class="navi" href="/simple_blog/">Wall</a>
-				<li class="navi">|
-				<li class="navi"> <a class="navi" href="">Blog</a>
 			</ul>
 		</div>
 	</div>
@@ -74,6 +72,9 @@
 									<input type="submit" name="post" class="button" value="post" />
 								</fieldset>
 							</form>
+							<?php if ($fulldis==$dis['edit']){
+							?> <a style="float:right" href="/simple_blog/">back to wall</a>
+							<?php }?>
 						</div>
 					<div class="container">
 				<?php				
@@ -85,7 +86,7 @@
 					</p>
 					<form method="post" action="inc/delete.inc.php">
 							<input type="submit" name="del" class="dbutton" value="delete" />
-							<input type="hidden" name="id" value="<?php echo $entries['id'];?>">
+							<input type="hidden" name="id" value="<?php echo $e['id'];?>">
 							
 					</form>
 					</div>
