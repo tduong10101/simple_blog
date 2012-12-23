@@ -1,6 +1,7 @@
 @CHARSET "ISO-8859-1";
 html{
-	font-family:"Arial";	
+	font-family:"Arial";
+	
 }
 .text {
 	resize:none;
@@ -23,15 +24,37 @@ html{
 }
 .dbutton {
 	float:right;
-	height:25px;
-	width:80px;	
 	font-weight:bolder;
 	border:none;
+	
 	background-color:white;
-	padding:0px;
-	margin-right:12px;
+	padding: 0px 10px 0px 10px;
+	margin:0px;
 	cursor:pointer;
 	cursor:hand;
+	font-size:12px;
+	font-family:"Arial"
+}
+a.edit{
+	display: block;
+	padding: 0px 10px 0px 10px;
+	margin:0px;
+	color:black;
+	float: right;
+	text-decoration: none;
+	text-align:center;
+	font-weight:bolder;
+}
+a.navi {
+	text-decoration: none;
+	text-align:center;
+	color: #ccd6e5;
+	margin:0px;
+	padding:5px 10px 10px 10px;
+}
+a.navi:hover {
+	background-color:#4b67a1;
+	color: #ffffff;
 }
 body {
 	border:0;
@@ -48,7 +71,11 @@ h3.header{
 	margin:0;
 	padding: 10px 7% 2px;
 }
-	
+span.created{
+	font-size:10px;
+	float:left;
+	color:grey;
+}
 div.header{
 	float: left;
 	width:100%;	
@@ -91,15 +118,4 @@ li.navi {
 	border:0px;
 	
 }
-a.navi {
-	text-decoration: none;
-	
-	text-align:center;
-	color: #ccd6e5;
-	margin:0px;
-	padding:5px 10px 10px 10px;
-}
-a.navi:hover {
-	background-color:#4b67a1;
-	color: #ffffff;
-}
+

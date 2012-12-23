@@ -1,8 +1,8 @@
 <?php
 function retrieveEntries($db, $id=NULL, $page)
 {	
-	$dis = array('allWall'=>0,'singleWall'=>1, 'invalid'=>2,'about'=>3,'noPage'=>4);
-	if ($page=='index'){
+	$dis = array('allWall'=>0,'singleWall'=>1, 'invalid'=>2,'about'=>3,'noPage'=>4,'edit'=>5);
+	if ($page=='index'||$page=='edit'){
 		$table='wall';
 	}else {
 		$table=$page;
@@ -26,8 +26,11 @@ function retrieveEntries($db, $id=NULL, $page)
 			$stm->execute(array($_GET['id']));
 			
 			$e = $stm->fetch();
-			
-			$fulldisp=$dis['singleWall'];
+			if ($page=="edit"){
+				$fulldisp=$dis['edit'];
+			} else{
+				$fulldisp=$dis['singleWall'];
+			}
 			// Set the fulldisp flag for single entry
 			if ($e==''){
 				$e=array('entry'=>"Invalid id");
@@ -53,11 +56,12 @@ function retrieveEntries($db, $id=NULL, $page)
 				$fulldisp =$dis['allWall'];
 			
 				// Load all entry
-				$sql="SELECT entry, id FROM ".$table." ORDER BY created DESC";
+				$sql="SELECT * FROM ".$table." ORDER BY created DESC";
 				
 				foreach($db->query($sql) as $row){
 					$e[] = array ('entry'=>$row['entry'],
-									'id'=>$row['id']);
+									'id'=>$row['id'],
+									'created'=>$row['created']);
 				}
 			
 			}

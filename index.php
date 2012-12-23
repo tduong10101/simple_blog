@@ -20,7 +20,7 @@
 			</ul>
 		</div>
 	</div>
-	<?php 		$dis = array('allWall'=>0,'singleWall'=>1, 'invalid'=>2,'about'=>3,'noPage'=>4);
+	<?php 		$dis = array('allWall'=>0,'singleWall'=>1, 'invalid'=>2,'about'=>3,'noPage'=>4,'edit'=>5);
 				include_once 'inc/function.inc.php';
 				include_once 'inc/db.inc.php';
 				$db = new PDO(DB_INFO, DB_USER, DB_PASS);
@@ -57,19 +57,27 @@
 					} 
 				}
 				else{
-				?>
+					if ($fulldis==$dis['edit']){
+						$text= $e['entry'];
+					}elseif ($fulldis == $dis['singleWall']||$fulldis==$dis['allWall']){
+						$text= ("What's on your mind?");}?>
+					
 					<div class="body">
 						<div class="container">
 							<form method="post" action="inc/update.inc.php">
 								<fieldset>
-									<textarea name="wall" class="text" rows="3" > What's on your mind?</textarea><br>
+									
+									<textarea name="wall" class="text" rows="3"><?php echo $text;?></textarea><br>
+									<?php if ($fulldis==$dis['edit']){?>
+									<input type="hidden" name="id" value="<?php echo $e['id'];?>">
+									<?php }?>
 									<input type="submit" name="post" class="button" value="post" />
 								</fieldset>
 							</form>
 						</div>
 					<div class="container">
 				<?php				
-				if($fulldis==1){
+				if($fulldis == $dis['singleWall']){
 					?><div class="entry">
 					<p class="entry">
 					<?php echo $e['entry'];
@@ -77,24 +85,34 @@
 					</p>
 					<form method="post" action="inc/delete.inc.php">
 							<input type="submit" name="del" class="dbutton" value="delete" />
+							<input type="hidden" name="id" value="<?php echo $entries['id'];?>">
+							
 					</form>
 					</div>
 					
 					
-				<?php } elseif ($fulldis==0){
+				<?php } elseif ($fulldis==$dis['allWall']){
 					
 					foreach($e as $entries){?><div class="entry">
 					<p><?php 
 					echo $entries['entry'];?>
-					
+					<br>
+					<span class="created">created on: <?php 
+					echo $entries['created'];?> </span>
+					<br>
 					</p>
+						
 					<form method="post" action="inc/delete.inc.php">
-							<input type="hidden" name="id" value="<?php echo $entries['id'];?>">
+							
 							<input type="submit" name="del" class="dbutton" value="delete" />
+							<a class="edit" href="/simple_blog/?page=edit&id=<?php echo $entries['id'];?>">edit</a>
+							<input type="hidden" name="id" value="<?php echo $entries['id'];?>">
+							
 					</form>
+					
 					</div>
 					<?php }
-				 } elseif ($fulldis==2){
+				 } elseif ($fulldis==$dis['allWall']){
 				 	?><div class="entry">
 					<p class="entry">
 					<?php echo $e['entry'];
