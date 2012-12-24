@@ -7,7 +7,8 @@
 
 </head>
 <body>
-	
+	<div align="center"><img src="img/bg.jpg" class="bg"></div>
+	<div style="position:absolute; width:100%">
 	<div class="header">
 		<h3 class="header">tBlog</h3>
 		<div class="navi">
@@ -42,16 +43,16 @@
 				
 				$fulldis = array_pop($e);
 				if ($fulldis==$dis['noPage']){
-					?><div class="container"><h1><?php echo $e['entry']?></h1></div><?php  	
+					?><div class="body"><div class="container"><h1><?php echo $e['entry']?></h1></div></div><?php  	
 				} elseif ($fulldis==$dis['about']){
 					
-					?><div class="container"><h1>About Author</h1></div>
+					?><div class="body"><div class="h1"><h1>About Author</h1></div>
 					<?php 
 					foreach($e as $entries){ ?>
 						<div class="container"><p><br>Name: <?php echo $entries['name']; ?>
 						<br>Address: <?php echo $entries['address']; ?>
 						<br>Education: <?php echo $entries['education']; ?></p>
-						<br>About me: <br><?php echo $entries['about']; ?></p></div><?php
+						<br>About me: <br><?php echo $entries['about']; ?></p></div></div><?php
 					} 
 				}
 				else{
@@ -62,7 +63,7 @@
 					
 					<div class="body">
 						<div class="container">
-							<form method="post" action="inc/update.inc.php">
+							<form class="entry" method="post" action="inc/update.inc.php">
 								<fieldset>
 									
 									<textarea name="wall" class="text" rows="3"><?php echo $text;?></textarea><br>
@@ -124,6 +125,7 @@
 				// Format the entries from the database
 				 }?>
 		</div>
+	</div>
 	</div>
 </body>
 </html>

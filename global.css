@@ -1,7 +1,8 @@
 @CHARSET "ISO-8859-1";
 html{
 	font-family:"Arial";
-	
+	color:black;
+	font-weight:bold;
 }
 .text {
 	resize:none;
@@ -18,16 +19,16 @@ html{
 	font-weight:bolder;
 	border:solid 1px;
 	border-color:#112b63;
-	margin-top:5px;
+	margin-top:10px;
 	cursor:pointer;
 	cursor:hand;
+	padding-bottom:5px;
 }
 .dbutton {
 	float:right;
 	font-weight:bolder;
 	border:none;
-	
-	background-color:white;
+	background:rgba(255,255,255,0.0);
 	padding: 0px 10px 0px 10px;
 	margin:0px;
 	cursor:pointer;
@@ -60,9 +61,22 @@ body {
 	border:0;
 	padding:0;
 	margin:0;
+	background-color:black;
 }
+.bg {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+}
+
+
+fieldset { border:0px;}
 h1{
-	float:left;
+	float:right;
+	opacity: 1;
+	color: white;
 }
 h3.header{
 	font-size:23px;
@@ -74,7 +88,7 @@ h3.header{
 span.created{
 	font-size:10px;
 	float:left;
-	color:grey;
+	color:black;
 }
 div.header{
 	float: left;
@@ -86,20 +100,34 @@ div.navi{
 	padding-right:10%;
 }
 div.body{
-	padding-top:5%;
+	padding-top:70px;
 }
 div.container{
 	float:left;
 	width:50%;
-	padding-left:25%;	
+	margin-left:25%;	
+	background-color:black;
+  	padding:10px 10px 3px 10px;
+  	margin-bottom: 20px;
+  	background:rgba(255,255,255,0.7);
+  	border:solid 1px black;
+}
+div.h1{
+	float:left;
+	width:50%;
+	margin-left:25%;	
+	background-color:none;
+  	padding:10px 10px 3px 10px;
+  	margin-bottom: 20px;
 }
 div.entry{
 	float:left;
 	width:100%;	
 	padding:0px;
-	margin:5px 0px;
+	margin-bottom:7px;
 	font-size:12px;
-	border:solid 1px grey;
+	border:solid 1px black;
+	
 }
 p{margin-bottom:0px;
 	padding-left:5px;}
