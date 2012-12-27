@@ -19,22 +19,11 @@ html{
 	font-weight:bolder;
 	border:solid 1px;
 	border-color:#112b63;
-	margin-top:10px;
+	margin:10px 10px 10px 0px;
 	cursor:pointer;
 	cursor:hand;
 	padding-bottom:5px;
-}
-.dbutton {
-	float:right;
-	font-weight:bolder;
-	border:none;
-	background:rgba(255,255,255,0.0);
-	padding: 0px 10px 0px 10px;
-	margin:0px;
-	cursor:pointer;
-	cursor:hand;
-	font-size:12px;
-	font-family:"Arial"
+	
 }
 a.edit{
 	display: block;
@@ -70,13 +59,14 @@ body {
   left: 0;
 
 }
-
-
 fieldset { border:0px;}
 h1{
 	float:right;
 	opacity: 1;
 	color: white;
+}
+h2{
+	padding-left:10px;
 }
 h3.header{
 	font-size:23px;
@@ -100,38 +90,47 @@ div.navi{
 	padding-right:10%;
 }
 div.body{
-	padding-top:70px;
+	margin-top:70px;
+	margin-left:25%;
+	margin-right:25%;
 }
 div.container{
 	float:left;
-	width:50%;
-	margin-left:25%;	
-	background-color:black;
+	width:100%;
   	padding:10px 10px 3px 10px;
   	margin-bottom: 20px;
-  	background:rgba(255,255,255,0.7);
+  	background:rgba(255,255,255,0.2);
   	border:solid 1px black;
 }
+div#about.container {
+	padding:10px 10px 10px 10px;
+}
 div.h1{
-	float:left;
-	width:50%;
-	margin-left:25%;	
+	float:right;
 	background-color:none;
-  	padding:10px 10px 3px 10px;
-  	margin-bottom: 20px;
 }
 div.entry{
 	float:left;
 	width:100%;	
-	padding:0px;
-	margin-bottom:7px;
+	padding-left:0px;
+	margin-bottom:10px;
 	font-size:12px;
 	border:solid 1px black;
+	background:rgba(255,255,255,0.9);
+  	border:solid 1px black;
 	
 }
 p{margin-bottom:0px;
-	padding-left:5px;}
-
+	padding-left:10px;
+	padding-right:10px;
+}
+p#about{
+	padding:40px 20px;
+	background:rgba(255,255,255,0.9);
+  	border:solid 1px black;
+  	margin:0px;	
+  	font-size:12px;
+}
 ul.navi {
 	list-style-type: none;
 	float:right;
@@ -146,4 +145,3 @@ li.navi {
 	border:0px;
 	
 }
-

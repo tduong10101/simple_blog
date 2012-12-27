@@ -3,7 +3,7 @@ function retrieveEntries($db, $id=NULL, $page)
 {	
 	$dis = array('allWall'=>0,'singleWall'=>1, 'invalid'=>2,'about'=>3,'noPage'=>4,'edit'=>5);
 	if ($page=='index'||$page=='edit'){
-		$table='wall';
+		$table='entry';
 	}else {
 		$table=$page;
 	}
@@ -21,7 +21,7 @@ function retrieveEntries($db, $id=NULL, $page)
 		if(isset($id))
 		{
 			// Load specified entry
-			$sql="SELECT entry, id FROM ".$table." WHERE id =? LIMIT 1";;
+			$sql="SELECT * FROM ".$table." WHERE id =? LIMIT 1";;
 			$stm = $db->prepare($sql);
 			$stm->execute(array($_GET['id']));
 			
@@ -59,9 +59,7 @@ function retrieveEntries($db, $id=NULL, $page)
 				$sql="SELECT * FROM ".$table." ORDER BY created DESC";
 				
 				foreach($db->query($sql) as $row){
-					$e[] = array ('entry'=>$row['entry'],
-									'id'=>$row['id'],
-									'created'=>$row['created']);
+					$e[] = $row;
 				}
 			
 			}

@@ -7,19 +7,10 @@
 
 </head>
 <body>
-	<div align="center"><img src="img/bg.jpg" class="bg"></div>
-	<div style="position:absolute; width:100%">
-	<div class="header">
-		<h3 class="header">tBlog</h3>
-		<div class="navi">
-			<ul class="navi" >
-				<li class="navi"> <a class="navi" href="/simple_blog/user">About Author</a>
-				<li class="navi">|
-				<li class="navi"> <a class="navi" href="/simple_blog/">Wall</a>
-			</ul>
-		</div>
-	</div>
-	<?php 		$dis = array('allWall'=>0,'singleWall'=>1, 'invalid'=>2,'about'=>3,'noPage'=>4,'edit'=>5);
+	
+	<?php include_once '/inc/header.inc.php';
+	
+	 		$dis = array('allWall'=>0,'singleWall'=>1, 'invalid'=>2,'about'=>3,'noPage'=>4,'edit'=>5);
 				include_once 'inc/function.inc.php';
 				include_once 'inc/db.inc.php';
 				$db = new PDO(DB_INFO, DB_USER, DB_PASS);
@@ -49,44 +40,28 @@
 					?><div class="body"><div class="h1"><h1>About Author</h1></div>
 					<?php 
 					foreach($e as $entries){ ?>
-						<div class="container"><p><br>Name: <?php echo $entries['name']; ?>
-						<br>Address: <?php echo $entries['address']; ?>
-						<br>Education: <?php echo $entries['education']; ?></p>
-						<br>About me: <br><?php echo $entries['about']; ?></p></div></div><?php
+						<div id="about" class="container"><p id="about">Name: <?php echo $entries['name']; ?><br>
+						<br>Address: <?php echo $entries['address']; ?><br>
+						<br>Education: <?php echo $entries['education']; ?><br>
+						<br>About me:<br> <br><?php echo $entries['about']; ?><br></p></div></div><?php
 					} 
 				}
-				else{
-					if ($fulldis==$dis['edit']){
-						$text= $e['entry'];
-					}elseif ($fulldis == $dis['singleWall']||$fulldis==$dis['allWall']){
-						$text= ("What's on your mind?");}?>
+				else{?>
 					
 					<div class="body">
-						<div class="container">
-							<form class="entry" method="post" action="inc/update.inc.php">
-								<fieldset>
-									
-									<textarea name="wall" class="text" rows="3"><?php echo $text;?></textarea><br>
-									<?php if ($fulldis==$dis['edit']){?>
-									<input type="hidden" name="id" value="<?php echo $e['id'];?>">
-									<?php }?>
-									<input type="submit" name="post" class="button" value="post" />
-								</fieldset>
-							</form>
-							<?php if ($fulldis==$dis['edit']){
-							?> <a style="float:right" href="/simple_blog/">back to wall</a>
-							<?php }?>
-						</div>
+					<div class="h1"><h1>Blog</h1></div>
 					<div class="container">
 				<?php				
 				if($fulldis == $dis['singleWall']){
 					?><div class="entry">
+					<h2><?php echo $e['title']; ?></h2>
 					<p class="entry">
-					<?php echo $e['entry'];
+					<?php echo nl2br($e['entry']);
 					?>
 					</p>
-					<form method="post" action="inc/delete.inc.php">
-							<input type="submit" name="del" class="dbutton" value="delete" />
+					<form method="post" action="inc/update.inc.php">
+							<input type="submit" name="edit" class="button" value="edit" />
+							<input type="submit" name="back" class="button" value="back" />
 							<input type="hidden" name="id" value="<?php echo $e['id'];?>">
 							
 					</form>
@@ -96,32 +71,27 @@
 				<?php } elseif ($fulldis==$dis['allWall']){
 					
 					foreach($e as $entries){?><div class="entry">
-					<p><?php 
-					echo $entries['entry'];?>
-					<br>
-					<span class="created">created on: <?php 
-					echo $entries['created'];?> </span>
-					<br>
-					</p>
 						
-					<form method="post" action="inc/delete.inc.php">
-							
-							<input type="submit" name="del" class="dbutton" value="delete" />
-							<a class="edit" href="/simple_blog/?page=edit&id=<?php echo $entries['id'];?>">edit</a>
-							<input type="hidden" name="id" value="<?php echo $entries['id'];?>">
-							
-					</form>
-					
+						<h2><?php echo $entries['title']; ?></h2>
+						<p>		
+							<span class="created">created on: <?php 
+							echo $entries['created'];?> </span>
+							<br>
+							<?php $str =  substr( $entries['entry'],0 , 300 );
+							$str =  nl2br(substr( $str,0 , strrpos($str, " ") ));
+							if (strlen($str)<200){
+								echo $str;
+							}else { echo $str."...";}
+							?>
+							<form method="post" action="inc/update.inc.php">
+									<input type="submit" name="edit" class="button" value="edit" />
+									<input type="submit" name="view" class="button" value="view" />
+									<input type="hidden" name="id" value="<?php echo $entries['id'];?>">	
+							</form>
+						</p>
 					</div>
 					<?php }
-				 } elseif ($fulldis==$dis['allWall']){
-				 	?><div class="entry">
-					<p class="entry">
-					<?php echo $e['entry'];
-					?>
-					</p>
-					</div>
-				 <?php }
+				 } 
 				// Format the entries from the database
 				 }?>
 		</div>
