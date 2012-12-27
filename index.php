@@ -43,7 +43,7 @@
 						<div id="about" class="container"><p id="about">Name: <?php echo $entries['name']; ?><br>
 						<br>Address: <?php echo $entries['address']; ?><br>
 						<br>Education: <?php echo $entries['education']; ?><br>
-						<br>About me:<br> <br><?php echo $entries['about']; ?><br></p></div></div><?php
+						<br>About me:<br> <br><?php echo nl2br($entries['about']); ?><br></p></div></div><?php
 					} 
 				}
 				else{?>
@@ -77,11 +77,11 @@
 							<span class="created">created on: <?php 
 							echo $entries['created'];?> </span>
 							<br>
-							<?php $str =  substr( $entries['entry'],0 , 300 );
-							$str =  nl2br(substr( $str,0 , strrpos($str, " ") ));
+							<?php $str =  nl2br(substr( $entries['entry'],0 , 200 ));
+							$str1 =  nl2br(substr( $str,0 , strrpos($str, " ") ));
 							if (strlen($str)<200){
 								echo $str;
-							}else { echo $str."...";}
+							}else { echo $str1."...";}
 							?>
 							<form method="post" action="inc/update.inc.php">
 									<input type="submit" name="edit" class="button" value="edit" />
