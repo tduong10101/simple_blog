@@ -57,6 +57,9 @@
 				if($fulldis == $dis['singleWall']||$fulldis == $dis['invalid']||$fulldis == $dis['noPage']){
 					?><div class="entry">
 					<h2><?php echo $e['title']; ?></h2>
+					<?php if($fulldis == $dis['singleWall']&&$e['image']!="/simple_blog/img/no_img.jpg"){?>
+					<img class="main" alt="" src="<?php echo $e['image']?>"/>
+					<?php }?>
 					<p class="entry">
 					<?php echo nl2br($e['entry']);
 					?>

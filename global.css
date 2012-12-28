@@ -64,7 +64,7 @@ img.main, img.edit{
 	margin-right:10px;
 }
 img.main{
-	margin:10px;	
+	margin:10px 100% 10px 10px;	
 }
 label{
 	font-weight:bold;	
@@ -134,8 +134,9 @@ div.entry{
 	background:rgba(255,255,255,0.9);
 	
 }
-p{	margin-bottom:0px;
-	margin-left:120px;
+p{	
+	margin-bottom:0px;
+	margin-left:10px;
 	padding-right:10px;
 }
 p#about{
