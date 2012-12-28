@@ -14,13 +14,15 @@
 				$id = (isset($_GET['id'])) ? (int) $_GET['id'] : NULL;
 				$e = retrieveEntries($db,$id,$_GET['page']);
 				$e = sanitiseData($e);
-				$text= $e['entry'];
-				$title = $e['title'];
 				$fulldis = array_pop($e);
 				$bvalue = "edit";
+				$image=$e['image'];
+				$text= $e['entry'];
+				$title = $e['title'];
 	}else{
 						$text= ("What's on your mind?");
-						$bvalue = "post";}?>
+						$bvalue = "post";
+						$image="/simple_blog/img/no_img.jpg";}?>
 <div class="body">
 	<?php if (isset($_GET['page'])){
 		?> <h1>Edit</h1><?php
@@ -36,10 +38,14 @@
 					<input type="text" name="title" maxlength="150" style="width:70%;" value="<?php if (isset($_GET['page'])){ echo $title;}?>"/>
 					</label>
 					<br>
-					<label>Image
-					<br>
-						<input type="file" name="image"/>
-					</label>
+					<div class="upload">
+						<label>Image
+						<br>
+						<img class ="edit" alt="" src="<?php echo $image?>" width="100" height="100"/>
+						<br>
+							<input type="file" name="image"/>
+						</label>
+					</div>
 					<br>
 					<label>Entry
 						<textarea name="wall" class="text" rows="15"><?php echo $text;?></textarea><br>

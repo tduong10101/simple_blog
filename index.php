@@ -79,7 +79,7 @@
 						<span class="created">created on: <?php 
 							echo $entries['created'];?> </span>
 						<br>
-						<img alt="" src="<?php echo $entries['image']?>" width="100" height="100"/>	
+						<img class="main" alt="" src="<?php echo $entries['image']?>" width="100" height="100"/>	
 						<p>	
 							
 							<?php $str =  (substr( $entries['entry'],0 , 500 ));

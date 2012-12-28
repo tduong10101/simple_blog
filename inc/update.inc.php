@@ -34,11 +34,15 @@ if($_SERVER['REQUEST_METHOD']=='POST'
 	}
 	
 	
-	if (!empty($_POST['id'])){
+	if (!empty($_POST['id'])&&($img_path!=NULL)){
 		$sql = "UPDATE entry SET entry=?, title=?, image=? WHERE id = ?";
 		$stmt = $db->prepare($sql);
 		$stmt->execute(array($_POST['wall'],$_POST['title'],$img_path,$_POST['id']));
-	} else{
+	} elseif (!empty($_POST['id'])&&($img_path==NULL)){
+		$sql = "UPDATE entry SET entry=?, title=? WHERE id = ?";
+		$stmt = $db->prepare($sql);
+		$stmt->execute(array($_POST['wall'],$_POST['title'],$_POST['id']));
+	}else{
 		// Save the entry into the database
 		$sql = "INSERT INTO entry  (entry,title,image) VALUES (?,?,?)";
 		$stmt = $db->prepare($sql);
