@@ -17,7 +17,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'
 		{
 			
 	// Instantiate the class and set a save path
-		$img = new ImageHandler("/simple_blog/img");
+		$img = new ImageHandler("/simple_blog/img",array(400,300));
 		// Process the file and store the returned path
 		$img_path = $img->processUploadedImage($_FILES['image']);
 		}
@@ -35,10 +35,21 @@ if($_SERVER['REQUEST_METHOD']=='POST'
 	
 	
 	if (!empty($_POST['id'])&&($img_path!=NULL)){
+		//delete old image
+		
+		$sql="SELECT image FROM entry WHERE id =?";;
+		$stm = $db->prepare($sql);
+		$stm->execute(array($_POST['id']));
+		$e = $stm->fetch();
+		if($e['image']!="/simple_blog/img/no_img.jpg"){
+			unlink($_SERVER['DOCUMENT_ROOT'].$e['image']);
+		}
+		
+		//update new contain
 		$sql = "UPDATE entry SET entry=?, title=?, image=? WHERE id = ?";
 		$stmt = $db->prepare($sql);
 		$stmt->execute(array($_POST['wall'],$_POST['title'],$img_path,$_POST['id']));
-	} elseif (!empty($_POST['id'])&&($img_path==NULL)){
+		} elseif (!empty($_POST['id'])&&($img_path==NULL)){
 		$sql = "UPDATE entry SET entry=?, title=? WHERE id = ?";
 		$stmt = $db->prepare($sql);
 		$stmt->execute(array($_POST['wall'],$_POST['title'],$_POST['id']));
@@ -46,7 +57,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'
 		// Save the entry into the database
 		$sql = "INSERT INTO entry  (entry,title,image) VALUES (?,?,?)";
 		$stmt = $db->prepare($sql);
-		$stmt->execute(array($_POST['wall'],$_POST['title']),$img_path);
+		$stmt->execute(array($_POST['wall'],$_POST['title'],$img_path));
 	}
 	$stmt->closeCursor();
 	header('Location: ../');

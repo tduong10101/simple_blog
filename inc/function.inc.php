@@ -88,6 +88,6 @@ function sanitiseData($data)
 	{
 	// Call sanitizeData recursively for each array element
 	return array_map('sanitiseData', $data);
-}
+	}
 }
 ?>
