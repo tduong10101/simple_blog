@@ -33,9 +33,7 @@
 				$e = sanitiseData($e);
 				
 				$fulldis = array_pop($e);
-				if ($fulldis==$dis['noPage']){
-					?><div class="body"><div class="container"><h1><?php echo $e['entry']?></h1></div></div><?php  	
-				} elseif ($fulldis==$dis['about']){
+				if ($fulldis==$dis['about']){
 					
 					?><div class="body"><div class="h1"><h1>About Author</h1></div>
 					<?php 
@@ -49,10 +47,14 @@
 				else{?>
 					
 					<div class="body">
+					<?php if ($fulldis == $dis['invalid']||$fulldis == $dis['noPage']){?>
+					<div class="h1"><h1>Error</h1></div>
+					<?php } else{?>
 					<div class="h1"><h1>Blog</h1></div>
+					<?php }?>
 					<div class="container">
 				<?php				
-				if($fulldis == $dis['singleWall']){
+				if($fulldis == $dis['singleWall']||$fulldis == $dis['invalid']||$fulldis == $dis['noPage']){
 					?><div class="entry">
 					<h2><?php echo $e['title']; ?></h2>
 					<p class="entry">
@@ -60,10 +62,11 @@
 					?>
 					</p>
 					<form method="post" action="inc/update.inc.php">
+							<?php if($fulldis == $dis['singleWall']){?>
 							<input type="submit" name="edit" class="button" value="edit" />
+							<?php }?>
 							<input type="submit" name="back" class="button" value="back" />
 							<input type="hidden" name="id" value="<?php echo $e['id'];?>">
-							
 					</form>
 					</div>
 					
@@ -73,22 +76,31 @@
 					foreach($e as $entries){?><div class="entry">
 						
 						<h2><?php echo $entries['title']; ?></h2>
-						<p>		
-							<span class="created">created on: <?php 
+						<span class="created">created on: <?php 
 							echo $entries['created'];?> </span>
-							<br>
-							<?php $str =  nl2br(substr( $entries['entry'],0 , 200 ));
-							$str1 =  nl2br(substr( $str,0 , strrpos($str, " ") ));
-							if (strlen($str)<200){
-								echo $str;
-							}else { echo $str1."...";}
+						<br>
+						<img alt="" src="<?php echo $entries['image']?>" width="100" height="100"/>	
+						<p>	
+							
+							<?php $str =  (substr( $entries['entry'],0 , 500 ));
+							
+							if (strrpos($str, "<")>strrpos($str, "</")){
+								$str1 =  (substr( $str,0 , strrpos($str, "<")));
+							} else {
+								$str1 =  (substr( $str,0 , strrpos($str, " ") ));
+							}
+							if (strlen($str)<500){
+								echo nl2br($str);
+							}else { echo nl2br($str1)."...";}
 							?>
-							<form method="post" action="inc/update.inc.php">
-									<input type="submit" name="edit" class="button" value="edit" />
-									<input type="submit" name="view" class="button" value="view" />
-									<input type="hidden" name="id" value="<?php echo $entries['id'];?>">	
-							</form>
+							
+							
 						</p>
+						<form method="post" action="inc/update.inc.php">
+								<input type="submit" name="edit" class="button" value="edit" />
+								<input type="submit" name="view" class="button" value="view" />
+								<input type="hidden" name="id" value="<?php echo $entries['id'];?>">	
+						</form>
 					</div>
 					<?php }
 				 } 

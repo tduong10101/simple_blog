@@ -10,7 +10,8 @@ function retrieveEntries($db, $id=NULL, $page)
 	
 	$sql = "SELECT id FROM ".$table;
 	if (!$db->query($sql)){
-		$e=array('entry'=>"This page is not exist");
+		$e=array('title'=>"No page",
+		'entry'=>"This page does not exist!");
 				$fulldisp=$dis['noPage'];
 	}
 	
@@ -33,7 +34,8 @@ function retrieveEntries($db, $id=NULL, $page)
 			}
 			// Set the fulldisp flag for single entry
 			if ($e==''){
-				$e=array('entry'=>"Invalid id");
+				$e=array('title'=>"Invalid ID",
+							'entry'=>"This entry does not exist!");
 				$fulldisp=$dis['invalid'];
 			}
 			
