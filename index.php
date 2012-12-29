@@ -42,18 +42,22 @@ if ($fulldis==$dis['about']){
 		</div>
 		<?php
 		foreach($e as $entries){ ?>
-		<div id="about" class="container">
-			<p id="about">
-				Name:
-				<?php echo $entries['name']; ?>
-				<br> <br>Address:
-				<?php echo $entries['address']; ?>
-				<br> <br>Education:
-				<?php echo $entries['education']; ?>
-				<br> <br>About me:<br> <br>
-				<?php echo nl2br($entries['about']); ?>
-				<br>
-			</p>
+		<div class="container">
+			<div class="entry"><?php list($width,$height) = getimagesize($_SERVER['DOCUMENT_ROOT']."/simple_blog/img/t.jpg");?> 
+			<img class="main" alt="" src="/simple_blog/img/t.jpg" width="<?php echo (width*(200/$height))?>" height="200" />
+				<p>
+					Name:
+					<?php echo $entries['name']; ?>
+					<br> <br>Address:
+					<?php echo $entries['address']; ?>
+					<br> <br>Education:
+					<?php echo $entries['education']; ?>
+					<br> <br>About me:<br> <br>
+					<?php echo nl2br($entries['about']); ?>
+					<br>
+					<br>
+				</p>
+			</div>
 		</div>
 	</div>
 	<?php

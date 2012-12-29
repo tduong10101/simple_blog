@@ -47,7 +47,6 @@ a.navi {
 }
 
 a.navi:hover {
-	background-color: #4b67a1;
 	color: #ffffff;
 }
 
@@ -124,7 +123,8 @@ div.upload {
 div.header {
 	float: left;
 	width: 100%;
-	background-color: #3b5998;
+	background-color: rgba(30,30,30,0.5);
+	border:solid black 1px;
 }
 
 div.navi {
@@ -143,12 +143,8 @@ div.container {
 	width: 100%;
 	padding: 10px 10px 3px 10px;
 	margin-bottom: 20px;
-	background: rgba(250, 250, 250, 0.2);
+	background: rgba(30, 30, 30, 0.5);
 	border: solid 1px black;
-}
-
-div#about.container {
-	padding: 10px 10px 10px 10px;
 }
 
 div.h1 {
@@ -163,7 +159,7 @@ div.entry,div.pagelegend {
 	margin-bottom: 10px;
 	font-size: 12px;
 	border: solid 1px black;
-	background: rgba(255, 255, 255, 0.9);
+	background: rgba(255, 255, 255, 0.8);
 }
 div.pagelegend {
 	font-size: 15px;
