@@ -1,7 +1,7 @@
 <?php
 /*1. Verify that information was submitted via the POST method
-2. Verify that the post was pressed
-3. Verify that wall is filled out*/
+ 2. Verify that the post was pressed
+ 3. Verify that wall is filled out*/
 // Include database credentials and connect to the database
 include_once 'db.inc.php';
 $db = new PDO(DB_INFO, DB_USER, DB_PASS);
@@ -12,31 +12,31 @@ if($_SERVER['REQUEST_METHOD']=='POST'
 && !empty($_POST['wall'])
 && !empty($_POST['title'])){
 	if(!empty($_FILES['image']['type']))
-	{ 
-		try 
+	{
+		try
 		{
-			
-	// Instantiate the class and set a save path
-		$img = new ImageHandler("/simple_blog/img",array(400,300));
-		// Process the file and store the returned path
-		$img_path = $img->processUploadedImage($_FILES['image']);
+				
+			// Instantiate the class and set a save path
+			$img = new ImageHandler("/simple_blog/img",array(600,450));
+			// Process the file and store the returned path
+			$img_path = $img->processUploadedImage($_FILES['image']);
 		}
-			catch(Exception $e)
+		catch(Exception $e)
 		{
-	// If an error occurred, output your custom error message
+			// If an error occurred, output your custom error message
 			die($e->getMessage());
 		}
 	}
 	else
 	{
-	// Avoids a notice if no image was uploaded
+		// Avoids a notice if no image was uploaded
 		$img_path = NULL;
 	}
-	
-	
+
+
 	if (!empty($_POST['id'])&&($img_path!=NULL)){
 		//delete old image
-		
+
 		$sql="SELECT image FROM entry WHERE id =?";;
 		$stm = $db->prepare($sql);
 		$stm->execute(array($_POST['id']));
@@ -44,28 +44,34 @@ if($_SERVER['REQUEST_METHOD']=='POST'
 		if($e['image']!="/simple_blog/img/no_img.jpg"){
 			unlink($_SERVER['DOCUMENT_ROOT'].$e['image']);
 		}
-		
+
 		//update new contain
 		$sql = "UPDATE entry SET entry=?, title=?, image=? WHERE id = ?";
 		$stmt = $db->prepare($sql);
 		$stmt->execute(array($_POST['wall'],$_POST['title'],$img_path,$_POST['id']));
-		} elseif (!empty($_POST['id'])&&($img_path==NULL)){
+	} elseif (!empty($_POST['id'])&&($img_path==NULL)){
 		$sql = "UPDATE entry SET entry=?, title=? WHERE id = ?";
 		$stmt = $db->prepare($sql);
 		$stmt->execute(array($_POST['wall'],$_POST['title'],$_POST['id']));
 	}else{
 		// Save the entry into the database
-		$sql = "INSERT INTO entry  (entry,title,image) VALUES (?,?,?)";
-		$stmt = $db->prepare($sql);
-		$stmt->execute(array($_POST['wall'],$_POST['title'],$img_path));
+		if ($img_path!=NULL){
+			$sql = "INSERT INTO entry  (entry,title,image) VALUES (?,?,?)";
+			$stmt = $db->prepare($sql);
+			$stmt->execute(array($_POST['wall'],$_POST['title'],$img_path));
+		} else{
+			$sql = "INSERT INTO entry  (entry,title) VALUES (?,?)";
+			$stmt = $db->prepare($sql);
+			$stmt->execute(array($_POST['wall'],$_POST['title']));
+		}
 	}
 	$stmt->closeCursor();
 	header('Location: ../');
 	exit;
 }elseif($_SERVER['REQUEST_METHOD']=='POST'
 && $_POST['del']=='delete')
-{	
-	
+{
+
 	// Save the entry into the database
 	$sql = "DELETE FROM entry
 		WHERE id = ?
@@ -78,13 +84,13 @@ if($_SERVER['REQUEST_METHOD']=='POST'
 }
 elseif ($_SERVER['REQUEST_METHOD']=='POST'
 && $_POST['edit']=='edit'){
-	
+
 	header('Location: /simple_blog/admin.php?page=edit&id='.$_POST['id']);
 	exit;
 }
 elseif ($_SERVER['REQUEST_METHOD']=='POST'
 && $_POST['view']=='view'){
-	
+
 	header('Location: /simple_blog/?id='.$_POST['id']);
 	exit;
 }
