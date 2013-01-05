@@ -1,19 +1,23 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link
-	rel="stylesheet" type="text/css" href="global.css">
+	rel="stylesheet" type="text/css" href="/simple_blog/global.css">
+<link rel="alternate" type="application/rss+xml"
+title="My Simple Blog - RSS 2.0"
+href="/simple_blog/feeds/rss.php" />
 <title>My Blog</title>
 
 </head>
 <body>
 
 <?php
-include_once '/inc/header.inc.php';
+include_once 'inc/function.inc.php';
+headerCreate();
 if (isset($_GET['page'])){
 	include_once 'inc/function.inc.php';
 	include_once 'inc/db.inc.php';
 	$db = new PDO(DB_INFO, DB_USER, DB_PASS);
-	$id = (isset($_GET['id'])) ? (int) $_GET['id'] : NULL;
-	$e = retrieveEntries($db,$id,$_GET['page']);
+	$url = (isset($_GET['url'])) ? (int) $_GET['url'] : NULL;
+	$e = retrieveEntries($db,$url,$_GET['page']);
 	$e = sanitiseData($e);
 	$fulldis = array_pop($e);
 	$bvalue = "edit";
@@ -36,7 +40,7 @@ if (isset($_GET['page'])){
 	}?>
 		<div class="container">
 			<div class="entry">
-				<form class="entry" method="post" action="inc/update.inc.php"
+				<form class="entry" method="post" action="/simple_blog/inc/update.inc.php"
 					enctype="multipart/form-data">
 					<fieldset>
 						<label>Title <br> <input type="text" name="title" maxlength="150"
@@ -52,7 +56,7 @@ if (isset($_GET['page'])){
 						<label>Entry <textarea name="wall" class="text" rows="15"><?php echo $text;?>
 							</textarea><br> </label>
 							<?php if (isset($_GET['page'])){?>
-						<input type="hidden" name="id" value="<?php echo $e['id'];?>">
+						<input type="hidden" name="url" value="<?php echo $e['url'];?>">
 						<?php }?>
 						<input type="submit" name="post" class="button"
 							value="<?php echo $bvalue; ?>" />

@@ -1,7 +1,7 @@
 <?php
-function retrieveEntries($db, $id=NULL, $page)
+function retrieveEntries($db, $url=NULL, $page='entry')
 {
-	$dis = array('allWall'=>0,'singleWall'=>1, 'invalid'=>2,'about'=>3,'noPage'=>4,'edit'=>5);
+	$dis = array('allWall'=>0,'singleWall'=>1, 'invalid'=>2,'about'=>3,'noPage'=>4,'edit'=>5, 'noEntry'=>6);
 	if ($page=='index'||$page=='edit'){
 		$table='entry';
 	}else {
@@ -11,20 +11,20 @@ function retrieveEntries($db, $id=NULL, $page)
 	$sql = "SELECT id FROM ".$table;
 	if (!$db->query($sql)){
 		$e=array('title'=>"No page",
-		'entry'=>"This page does not exist!");
+		'entry'=>"This page does not exist!",'created'=>NULL);
 		$fulldisp=$dis['noPage'];
 	}
 
 	else{
 		/*
-		 * If an entry ID was supplied, load the associated entry
+		 * If an entry url was supplied, load the associated entry
 		 */
-		if(isset($id))
+		if(isset($url))
 		{
 			// Load specified entry
-			$sql="SELECT * FROM ".$table." WHERE id =? LIMIT 1";;
+			$sql="SELECT * FROM ".$table." WHERE url =? LIMIT 1";;
 			$stm = $db->prepare($sql);
-			$stm->execute(array($_GET['id']));
+			$stm->execute(array($_GET['url']));
 				
 			$e = $stm->fetch();
 			if ($page=="edit"){
@@ -34,8 +34,9 @@ function retrieveEntries($db, $id=NULL, $page)
 			}
 			// Set the fulldisp flag for single entry
 			if ($e==''){
-				$e=array('title'=>"Invalid ID",
-							'entry'=>"This entry does not exist!");
+				$e=array('title'=>"Invalid url",
+							'entry'=>"This entry does not exist!",
+							'created'=>NULL);
 				$fulldisp=$dis['invalid'];
 			}
 				
@@ -54,7 +55,7 @@ function retrieveEntries($db, $id=NULL, $page)
 				foreach($db->query($sql) as $row){
 					$e[] = $row;
 				}
-			}elseif ($page=="index"){
+			}elseif ($page=="index"||$page=="entry"){
 				$fulldisp =$dis['allWall'];
 					
 				// Load all entry
@@ -67,8 +68,9 @@ function retrieveEntries($db, $id=NULL, $page)
 			}
 		}
 		if (!isset($e)){
-			$e = array('entry'=>"There is no entry! Please post something!");
-			$fulldisp=$dis['invalid'];
+			$e = array('entry'=>"There is no entry! Please <a href= 'http://localhost/simple_blog/admin'>post something</a>! " 
+			,'created'=>NULL,'title'=>"Welcome to tBlog!",'image'=>("/simple_blog/img/no_img.jpg"));
+			$fulldisp=$dis['noEntry'];
 		}
 	}
 
@@ -90,4 +92,42 @@ function sanitiseData($data)
 		return array_map('sanitiseData', $data);
 	}
 }
+function headerCreate (){
+	?> <div align="center"><img src="/simple_blog/img/bg.jpg" class="bg"></div>
+	<div class="wrap">
+<div class="header">
+	<h3 class="header">tBlog</h3>
+	<div class="navi">
+		<ul class="navi" >
+			<li class="navi"> <a class="navi" href="/simple_blog/user">About Author</a>
+			<li class="navi">|
+			<li class="navi"> <a class="navi" href="/simple_blog/">Blog</a>
+			<li class="navi">|
+			<li class="navi"> <a class="navi" href="/simple_blog/admin">New Entry</a>
+		</ul>
+	</div>
+</div><?php 
+}
+function makeUrl($title)
+{
+$patterns = array(
+'/\s+/',
+'/(?!-)\W+/'
+);
+$replacements = array('-', '');
+return preg_replace($patterns, $replacements, strtolower($title));
+}
+function cutEntry ($entry,$position=500){
+$str =  (substr( $entry,0 , $position ));
+					
+				if (strrpos($str, "<")>strrpos($str, "</")){
+					$str1 =  (substr( $str,0 , strrpos($str, "<")));
+				} else {
+					$str1 =  (substr( $str,0 , strrpos($str, " ") ));
+				}
+				if (strlen($str)<$position){
+					return nl2br($str);
+				}else { return nl2br($str1)."...";}
+}
+
 ?>

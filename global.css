@@ -15,7 +15,7 @@ html {
 .button {
 	float: right;
 	color: white;
-	background-color: #3b5998;
+	background-color: #07263f;
 	height: 25px;
 	width: 80px;
 	font-weight: bolder;
@@ -41,13 +41,23 @@ a.edit {
 a.navi {
 	text-decoration: none;
 	text-align: center;
-	color: #ccd6e5;
+	color: #d7d7d7;
 	margin: 0px;
 	padding: 5px 10px 10px 10px;
 }
 
 a.navi:hover {
 	color: #ffffff;
+}
+
+a.title {
+	text-decoration: none;
+	color: #2e2e2e;
+	margin: 0px;
+}
+
+a.title:hover {
+	color: black;
 }
 
 body {
@@ -57,15 +67,12 @@ body {
 	background-color: black;
 }
 
-.bg {
-	/* Set rules to fill background */
+.bg { /* Set rules to fill background */
 	min-height: 100%;
 	min-width: 1024px;
-	
 	/* Set up proportionate scaling */
 	width: 100%;
 	height: auto;
-	
 	/* Set up positioning */
 	position: fixed;
 	top: 0;
@@ -98,6 +105,7 @@ h1 {
 
 h2 {
 	padding-left: 10px;
+	padding-right: 10px;
 	margin-bottom: 0px;
 }
 
@@ -123,8 +131,8 @@ div.upload {
 div.header {
 	float: left;
 	width: 100%;
-	background-color: rgba(30,30,30,0.5);
-	border:solid black 1px;
+	background-color: rgba(30, 30, 30, 0.5);
+	border: solid black 1px;
 }
 
 div.navi {
@@ -147,6 +155,17 @@ div.container {
 	border: solid 1px black;
 }
 
+div#left.container {
+	width: 23%;
+	padding-left:0px;
+	margin-top:110px;
+}
+
+div.wrap {
+	position: absolute;
+	width: 100%
+}
+
 div.h1 {
 	float: right;
 	background-color: none;
@@ -161,19 +180,28 @@ div.entry,div.pagelegend {
 	border: solid 1px black;
 	background: rgba(255, 255, 255, 0.8);
 }
+
+div#left.entry {
+	overflow: hidden;
+	white-space: nowrap;
+}
+
 div.pagelegend {
 	font-size: 15px;
-	font-weight:bold;
-	text-align:center;
+	font-weight: bold;
+	text-align: center;
 }
-div.pagelegend > a {
-	color:grey;
+
+div.pagelegend>a {
+	color: grey;
 	text-decoration: none;
-	padding-right:5px;
+	padding-right: 5px;
 }
-div.pagelegend > a#current {
-	color:black;
+
+div.pagelegend>a#current {
+	color: black;
 }
+
 p {
 	margin-bottom: 0px;
 	margin-left: 10px;
@@ -190,6 +218,7 @@ p#about {
 
 p.entry {
 	margin-left: 10px;
+	margin-bottom: 10px;
 }
 
 ul.navi {
@@ -197,6 +226,14 @@ ul.navi {
 	float: right;
 	margin: 0px;
 	border: 0px;
+}
+
+ol#left {
+	padding-left: 30px;
+}
+
+ol#left>li {
+	padding-bottom: 10px;
 }
 
 li.navi {
