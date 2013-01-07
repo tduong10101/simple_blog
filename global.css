@@ -3,6 +3,9 @@
 html {
 	font-family: "Arial";
 	color: black;
+    overflow: scroll;
+    overflow-x: hidden;
+  
 }
 
 .text {
@@ -17,25 +20,13 @@ html {
 	color: white;
 	background-color: #07263f;
 	height: 25px;
-	width: 80px;
+	width: auto;
 	font-weight: bolder;
 	border: solid 1px;
 	border-color: #112b63;
 	margin: 10px 10px 10px 0px;
 	cursor: pointer;
 	cursor: hand;
-	padding-bottom: 5px;
-}
-
-a.edit {
-	display: block;
-	padding: 0px 10px 0px 10px;
-	margin: 0px;
-	color: black;
-	float: right;
-	text-decoration: none;
-	text-align: center;
-	font-weight: bolder;
 }
 
 a.navi {
@@ -43,11 +34,12 @@ a.navi {
 	text-align: center;
 	color: #d7d7d7;
 	margin: 0px;
-	padding: 5px 10px 10px 10px;
+	padding: 10px 10px 10px 10px;
 }
 
 a.navi:hover {
 	color: #ffffff;
+	background-color: rgba(250,250,250,0.2);
 }
 
 a.title {
@@ -64,7 +56,6 @@ body {
 	border: 0;
 	padding: 0;
 	margin: 0;
-	background-color: black;
 }
 
 .bg { /* Set rules to fill background */
@@ -95,6 +86,8 @@ label {
 
 fieldset {
 	border: 0px;
+	margin:0px;
+	padding:10px 10px 0px 10px;
 }
 
 h1 {
@@ -114,16 +107,29 @@ h3.header {
 	color: white;
 	float: left;
 	margin: 0;
-	padding: 10px 7% 2px;
+	padding: 10px 7% 0px;
 }
 
-span.created {
+span.created{
 	font-size: 10px;
 	float: left;
 	color: grey;
 	margin-left: 10px;
 }
-
+span.date {
+	font-size: 10px;
+	float:right;
+	margin-right:10px;
+}
+span#name{
+	font-weight:bold;
+	padding:10px;
+}
+div#comment{
+	background-color:rgba(30,30,30,0.5);
+	padding-top:2px;
+	padding-bottom:2px;
+}
 div.upload {
 	height: 130px;
 }
@@ -150,26 +156,54 @@ div.container {
 	float: left;
 	width: 100%;
 	padding: 10px 10px 3px 10px;
-	margin-bottom: 20px;
+	margin-bottom: 1px;
 	background: rgba(30, 30, 30, 0.5);
 	border: solid 1px black;
 }
 
 div#left.container {
-	width: 23%;
+	width: auto;
 	padding-left:0px;
-	margin-top:110px;
+	position:fixed;
+	left:7.8%;
+	top:151px;
 }
 
+div#right.container {
+	position:fixed;
+	right:11%;
+	top:151px;
+	width:auto;
+	padding-bottom:10px;
+}
+div#right img {
+	float:left;
+	width:40px;
+	height:40px;
+}
+
+a.link {
+	float:left;
+	text-decoration:none;
+	color:white;
+	font-weight: bold;
+	font-size:15px;
+	display:block;
+	padding:12px 10px 25px 12px; 
+}
+div#left a.link{
+	float:none;
+	padding:0;
+	font-size:13px;
+	font-weight: normal;
+}
 div.wrap {
 	position: absolute;
-	width: 100%
+	width: 100%;
+	
+	padding-bottom:19px;
 }
 
-div.h1 {
-	float: right;
-	background-color: none;
-}
 
 div.entry,div.pagelegend {
 	float: left;
@@ -184,6 +218,9 @@ div.entry,div.pagelegend {
 div#left.entry {
 	overflow: hidden;
 	white-space: nowrap;
+	background:none;
+	border:none;
+	color:white;
 }
 
 div.pagelegend {

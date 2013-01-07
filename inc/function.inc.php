@@ -1,7 +1,7 @@
 <?php
 function retrieveEntries($db, $url=NULL, $page='entry')
 {
-	$dis = array('allWall'=>0,'singleWall'=>1, 'invalid'=>2,'about'=>3,'noPage'=>4,'edit'=>5, 'noEntry'=>6);
+	$dis = array('main'=>0,'entry'=>1, 'invalid'=>2,'about'=>3,'noPage'=>4,'edit'=>5, 'noEntry'=>6);
 	if ($page=='index'||$page=='edit'){
 		$table='entry';
 	}else {
@@ -30,7 +30,7 @@ function retrieveEntries($db, $url=NULL, $page='entry')
 			if ($page=="edit"){
 				$fulldisp=$dis['edit'];
 			} else{
-				$fulldisp=$dis['singleWall'];
+				$fulldisp=$dis['entry'];
 			}
 			// Set the fulldisp flag for single entry
 			if ($e==''){
@@ -56,7 +56,7 @@ function retrieveEntries($db, $url=NULL, $page='entry')
 					$e[] = $row;
 				}
 			}elseif ($page=="index"||$page=="entry"){
-				$fulldisp =$dis['allWall'];
+				$fulldisp =$dis['main'];
 					
 				// Load all entry
 				$sql="SELECT * FROM ".$table." ORDER BY created DESC";
@@ -99,7 +99,7 @@ function headerCreate (){
 	<h3 class="header">tBlog</h3>
 	<div class="navi">
 		<ul class="navi" >
-			<li class="navi"> <a class="navi" href="/simple_blog/user">About Author</a>
+			<li class="navi"> <a class="navi" href="/simple_blog/user">About Me</a>
 			<li class="navi">|
 			<li class="navi"> <a class="navi" href="/simple_blog/">Blog</a>
 			<li class="navi">|

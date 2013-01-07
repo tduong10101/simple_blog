@@ -1,4 +1,5 @@
 <?php
+
 /*1. Verify that information was submitted via the POST method
  2. Verify that the post was pressed
  3. Verify that wall is filled out*/
@@ -75,11 +76,13 @@ if($_SERVER['REQUEST_METHOD']=='POST'
 }elseif($_SERVER['REQUEST_METHOD']=='POST'
 && $_POST['del']=='delete')
 {
-
-	// Save the entry into the database
+	
 	$sql = "DELETE FROM entry
 		WHERE url = ?
 		LIMIT 1";
+	if($e['image']!="/simple_blog/img/no_img.jpg"){
+		unlink($_SERVER['DOCUMENT_ROOT'].$e['image']);
+	}
 	$stmt = $db->prepare($sql);
 	$stmt->execute(array($_POST['url']));
 	$stmt->closeCursor();
@@ -95,6 +98,45 @@ elseif ($_SERVER['REQUEST_METHOD']=='POST'
 elseif ($_SERVER['REQUEST_METHOD']=='POST'
 && $_POST['view']=='view'){
 
+	header('Location: /simple_blog/blog/'.$_POST['url']);
+	exit;
+}
+// If a comment is being posted, handle it here
+else if($_SERVER['REQUEST_METHOD'] == 'POST'
+		&& $_POST['post'] == 'Post Comment')
+{
+	// Include and instantiate the Comments class
+	include_once 'comments.inc.php';
+	$comments = new Comments();
+	// Save the comment
+	if($comments->saveComment($_POST))
+	{
+		// If available, store the entry the user came from
+		if(isset($_SERVER['HTTP_REFERER']))
+		{
+			$loc = $_SERVER['HTTP_REFERER'];
+		}
+		else
+		{
+			$loc = '../';
+		}
+		// Send the user back to the entry
+		header('Location: '.$loc);
+		exit;
+	}
+	// If saving fails, output an error message
+	else
+	{
+		exit('Something went wrong while saving the comment.');
+	}
+}
+// If the delete link is clicked on a comment, confirm it here
+else if($_POST['delete_comment'] == 'delete')
+{
+	// Include and instantiate the Comments class
+	include_once 'comments.inc.php';
+	$comments = new Comments();
+	$comments->deleteComment($_POST['cId']);
 	header('Location: /simple_blog/blog/'.$_POST['url']);
 	exit;
 }
