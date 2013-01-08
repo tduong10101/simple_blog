@@ -123,16 +123,16 @@ else{?>
 			</div>	
 			<?php } } elseif ($fulldis==$dis['main']){
 				//display 4 entry in a page
-				$numEntry=4;
-				$totalPage= ceil(count($e)/$numEntry);
+				$numbEntry=4;
+				$totalPage= ceil(count($e)/$numbEntry);
 				if (!isset($_GET['ipage'])||($_GET['ipage']>$totalPage)){
 					$ipage = 0;
 				} else {
 					$ipage = $_GET['ipage']-1;
 				}
 
-				$sloop=$ipage*$numEntry;
-				$eloop=($ipage+1)*$numEntry;
+				$sloop=$ipage*$numbEntry;
+				$eloop=($ipage+1)*$numbEntry;
 				for($i=$sloop;$i<$eloop;$i++){ ?>
 			<div class="entry">
 
@@ -153,7 +153,8 @@ else{?>
 				<form method="post" action="/simple_blog/inc/update.inc.php">
 					<fieldset><input type="submit" name="edit" class="button" value="edit" /> <input
 						type="submit" name="view" class="button" value="view" /> <input
-						type="hidden" name="url" value="<?php echo $e[$i]['url'];?>">
+						type="hidden" name="url" value="<?php echo $e[$i]['url'];?>"><input
+						type="hidden" name="ipage" value="<?php echo $_GET['ipage'];?>">
 				</fieldset></form>
 
 			</div>
@@ -164,25 +165,15 @@ else{?>
 				if (!isset($_GET['ipage'])){
 					$_GET['ipage']=1;
 				} 
-				if ($_GET['ipage']==1) {
-					$d=1;	
-				} else{ 
-					if ($_GET['ipage']==2){
-						$d=2;
-					}
-					else if ($_GET['ipage']>2){
-						$d = 3;
-					} if ($_GET['ipage']>5){
-						if ($totalPage-$_GET['ipage']==1){
-							$d = 4;
-						} else if ($totalPage-$_GET['ipage']==0){
-							$d = 5;
-						}
-					}
-					?><a href="/simple_blog/">first</a><?php
+				$sloop = $_GET['ipage']-3;
+				$loop = $_GET['ipage']+3;
+				if ($loop>$totalPage){
+					$sloop=$_GET['ipage']-5;
 				}
-				$sloop = ($_GET['ipage']-$d);
-				$loop = ($_GET['ipage']-$d)+5;
+				if ($sloop<0){
+					$sloop=0;
+					$loop = $loop+abs($_GET['ipage']-3);
+				}
 				for ($i=$sloop;$i<$loop;$i++){ ?> <a <?php if ($ipage==$i){?> id="current"<?php } 
 					if( $i == $totalPage){
 						break;

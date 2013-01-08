@@ -38,26 +38,31 @@ if($_SERVER['REQUEST_METHOD']=='POST'
 		$img_path = NULL;
 	}
 
-
-	if (!empty($_POST['url'])&&($img_path!=NULL)){
-		//delete old image
-
-		$sql="SELECT image FROM entry WHERE url =?";;
-		$stm = $db->prepare($sql);
-		$stm->execute(array($_POST['url']));
-		$e = $stm->fetch();
-		if($e['image']!="/simple_blog/img/no_img.jpg"){
-			unlink($_SERVER['DOCUMENT_ROOT'].$e['image']);
+	if (!empty($_POST['url'])){
+		
+	
+		if ($img_path!=NULL){
+			//delete old image
+	
+			$sql="SELECT image FROM entry WHERE url =?";;
+			$stm = $db->prepare($sql);
+			$stm->execute(array($_POST['url']));
+			$e = $stm->fetch();
+			if($e['image']!="/simple_blog/img/no_img.jpg"){
+				unlink($_SERVER['DOCUMENT_ROOT'].$e['image']);
+			}
+	
+			//update new contain
+			$sql = "UPDATE entry SET entry=?, title=?, image=?, url=? WHERE url = ?";
+			$stmt = $db->prepare($sql);
+			$stmt->execute(array($_POST['wall'],$_POST['title'],$img_path,$url,$_POST['url']));
+		} elseif ($img_path==NULL){
+			$sql = "UPDATE entry SET entry=?, title=?,url=? WHERE url = ?";
+			$stmt = $db->prepare($sql);
+			$stmt->execute(array($_POST['wall'],$_POST['title'],$url,$_POST['url']));
 		}
-
-		//update new contain
-		$sql = "UPDATE entry SET entry=?, title=?, image=?, url=? WHERE url = ?";
-		$stmt = $db->prepare($sql);
-		$stmt->execute(array($_POST['wall'],$_POST['title'],$img_path,$url,$_POST['url']));
-	} elseif (!empty($_POST['url'])&&($img_path==NULL)){
-		$sql = "UPDATE entry SET entry=?, title=?,url=? WHERE url = ?";
-		$stmt = $db->prepare($sql);
-		$stmt->execute(array($_POST['wall'],$_POST['title'],$url,$_POST['url']));
+		$stmt->closeCursor();
+		header('Location: /simple_blog/blog/'.$_POST['url']);
 	}else{
 		// Save the entry into the database
 		if ($img_path!=NULL){
@@ -69,14 +74,17 @@ if($_SERVER['REQUEST_METHOD']=='POST'
 			$stmt = $db->prepare($sql);
 			$stmt->execute(array($_POST['wall'],$_POST['title'],$url));
 		}
+		$stmt->closeCursor();
+		header('Location: ../');
 	}
-	$stmt->closeCursor();
-	header('Location: ../');
+	
 	exit;
 }elseif($_SERVER['REQUEST_METHOD']=='POST'
 && $_POST['del']=='delete')
-{
-	
+{	// delete all comments first
+	include_once 'comments.inc.php';
+	$comments = new Comments();
+	$comments->deleteAllComment($_POST['id']);
 	$sql = "DELETE FROM entry
 		WHERE url = ?
 		LIMIT 1";
@@ -97,8 +105,9 @@ elseif ($_SERVER['REQUEST_METHOD']=='POST'
 }
 elseif ($_SERVER['REQUEST_METHOD']=='POST'
 && $_POST['view']=='view'){
-
+	
 	header('Location: /simple_blog/blog/'.$_POST['url']);
+	
 	exit;
 }
 // If a comment is being posted, handle it here
@@ -131,13 +140,36 @@ else if($_SERVER['REQUEST_METHOD'] == 'POST'
 	}
 }
 // If the delete link is clicked on a comment, confirm it here
-else if($_POST['delete_comment'] == 'delete')
+else if($_SERVER['REQUEST_METHOD'] == 'POST'
+		&& $_POST['delete_comment'] == 'delete')
 {
 	// Include and instantiate the Comments class
 	include_once 'comments.inc.php';
 	$comments = new Comments();
 	$comments->deleteComment($_POST['cId']);
 	header('Location: /simple_blog/blog/'.$_POST['url']);
+	exit;
+}
+// Go back to the right page
+else if($_SERVER['REQUEST_METHOD'] == 'POST'
+		&& $_POST['back'] == 'back')
+{
+	$numb=0;
+	$numbEntry=4;
+	include_once 'function.inc.php';
+	$e = retrieveEntries($db);
+	for ($i=0;$i<count($e);$i++){
+		if ($e[$i]['url']==$_POST['url']){
+			$numb=$i;
+			break;
+		}
+	}
+	$ipage = floor($numb/$numbEntry)+1;
+	if ($ipage>1){
+		header('Location: /simple_blog/page/'.$ipage);
+	} else {
+		header('Location: ../');
+	}
 	exit;
 }
 else

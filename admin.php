@@ -62,6 +62,7 @@ if (isset($_GET['page'])){
 							value="<?php echo $bvalue; ?>" />
 							<?php if (isset($_GET['page'])){?>
 						<input type="submit" name="del" class="button" value="delete" />
+						<input type="hidden" name="id" value="<?php echo $e['id'];?>">
 						<?php }?>
 						<input type="submit" name="cancel" class="button" value="cancel" />
 					</fieldset>

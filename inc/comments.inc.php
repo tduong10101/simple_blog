@@ -107,6 +107,21 @@ FORM;
 			return FALSE;
 		}
 	}
+	public function deleteAllComment($blog_id)
+	{
+		$sql = "DELETE FROM comments
+		WHERE blog_id=?";
+		if($stmt = $this->db->prepare($sql))
+		{
+			// Execute the command, free used memory, and return true
+			$stmt->execute(array($blog_id));
+			$stmt->closeCursor();
+			return TRUE;
+		}else{
+			// If something went wrong, return false
+			return FALSE;
+		}
+	}
 }
 
 ?>

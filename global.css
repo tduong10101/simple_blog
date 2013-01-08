@@ -19,8 +19,8 @@ html {
 	float: right;
 	color: white;
 	background-color: #07263f;
-	height: 25px;
-	width: auto;
+	height: 20px;
+	min-width: 70px;
 	font-weight: bolder;
 	border: solid 1px;
 	border-color: #112b63;
