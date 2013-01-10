@@ -185,7 +185,7 @@ else{?>
 					$loop = $loop+abs($_GET['ipage']-3);
 				}
 				if ($_GET['ipage']>1){
-					?><a href="/simple_blog/page/">first</a><?php
+					?><a href="/simple_blog/">first</a><?php
 								}
 				for ($i=$sloop;$i<$loop;$i++){ ?> <a <?php if ($ipage==$i){?> id="current"<?php } 
 					if( $i == $totalPage){
