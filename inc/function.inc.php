@@ -100,10 +100,19 @@ function headerCreate (){
 	<div class="navi">
 		<ul class="navi" >
 			<li class="navi"> <a class="navi" href="/simple_blog/user">About Me</a>
-			<li class="navi">|
+			<li class="navi">
 			<li class="navi"> <a class="navi" href="/simple_blog/">Blog</a>
-			<li class="navi">|
-			<li class="navi"> <a class="navi" href="/simple_blog/admin">New Entry</a>
+			<li class="navi"> 
+			<?php if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 1)
+			{
+				?><li class="navi"> <a class="navi" href="/simple_blog/admin">Post Entry</a>
+				<li class="navi"> <a class="navi" href="/simple_blog/admin/create">Manage User</a><li class="navi">  
+				<li class="navi"> <a class="navi" href="/simple_blog/inc/update.inc.php?action=logout">Logout</a><?php
+			} else {
+				?><li class="navi"> <a class="navi" href="/simple_blog/admin">Login</a><?php
+			}?>
+			
+			
 		</ul>
 	</div>
 </div><?php 
@@ -129,5 +138,23 @@ $str =  (substr( $entry,0 , $position ));
 					return nl2br($str);
 				}else { return nl2br($str1)."...";}
 }
-
+function createUserForm()
+{
+	return <<<FORM
+<form action="/simple_blog/inc/update.inc.php" method="post">
+<fieldset>
+<h3>Create User</h3>
+<label>Username
+<input type="text" name="username" maxlength="75" />
+</label>
+<label>Password
+<input type="password" name="password" />
+</label>
+<input type="submit" name="submit" value="Create" class="button"/>
+<input type="submit" name="submit" value="Cancel" class="button"/>
+<input type="hidden" name="action" value="createuser" />
+</fieldset>
+</form>
+FORM;
+}
 ?>

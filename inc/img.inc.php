@@ -3,7 +3,7 @@ class ImageHandler
 {
 	// The folder in which to save images
 	public $save_dir;
-	public $max_dims;
+ 	public $max_dims;
 	// Sets the $save_dir on instantiation
 	public function __construct($save_dir,$max_dims=array(350,240))
 	{
@@ -39,7 +39,7 @@ class ImageHandler
 		// Create the full path to the image for saving
 		$filepath = $this->save_dir . '/' . $name;
 		// Store the absolute path to move the image
-		$absolute = $_SERVER['DOCUMENT_ROOT'] . $filepath;
+		$absolute = '/home/a6944098/public_html/' . $filepath;
 		// Save the image
 		if(!move_uploaded_file($tmp, $absolute))
 		{
@@ -61,7 +61,7 @@ class ImageHandler
 	{
 		// Check for the dir
 		// Determines the path to check
-		$path = $_SERVER['DOCUMENT_ROOT'] . $this->save_dir;
+		$path = '/home/a6944098/public_html/' . $this->save_dir;
 		// Checks if the directory exists
 		if(!is_dir($path))
 		{

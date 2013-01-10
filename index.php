@@ -1,3 +1,6 @@
+<?php 
+session_start();
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -12,7 +15,6 @@ href="/simple_blog/feeds/rss.php" />
 <body>
 
 <?php 
-
 $dis = array('main'=>0,'entry'=>1, 'invalid'=>2,'about'=>3,'noPage'=>4,'edit'=>5,'noEntry'=>6);
 include_once 'inc/function.inc.php';
 include_once 'inc/db.inc.php';
@@ -60,10 +62,11 @@ $fulldis = array_pop($e);
 	<div class="body">
 		<h1>About Author</h1>
 		<?php
-		foreach($e as $entries){ ?>
+		foreach($e as $entries){ 
+		$absPath = '/home/a6944098/public_html'."/simple_blog/img/t.jpg";?>
 		<div class="container">
-			<div class="entry"><?php list($width,$height) = getimagesize($_SERVER['DOCUMENT_ROOT']."/simple_blog/img/t.jpg");?> 
-			<img class="main" alt="" src="/simple_blog/img/t.jpg" width="<?php echo (width*(150/$height))?>" height="150" />
+			<div class="entry"><?php list($width,$height) = getimagesize($absPath);?> 
+			<img class="main" alt="" src="/simple_blog/img/t.jpg" width="<?php echo ($width*(200/$height))?>px" height="200px" />
 				<p>
 					Name:
 					<?php echo $entries['name']; ?>
@@ -113,10 +116,10 @@ else{?>
 				</p>
 				<?php if($fulldis != $dis['noEntry']){?>
 				<form method="post" action="/simple_blog/inc/update.inc.php"><fieldset>
-				<?php if($fulldis == $dis['entry']){?>
-					<input type="submit" name="edit" class="button" value="edit" />
+				<?php if(($fulldis == $dis['entry'])&&(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 1)){?>
+					<input type="submit" name="edit" class="button" value="Edit" />
 					<?php }?>
-					<input type="submit" name="back" class="button" value="back" /> <input
+					<input type="submit" name="back" class="button" value="Back" /> <input
 						type="hidden" name="url" value="<?php echo $e['url'];?>">
 				</fieldset>
 				</form>
@@ -140,9 +143,14 @@ else{?>
 				<a class="title" href="/simple_blog/blog/<?php echo $e[$i]['url'];?>"><?php echo $e[$i]['title']; ?></a>
 				</h2>
 				<span class="created">created on: <?php 
-				echo date("l jS F , Y, g:i a", strtotime($e[$i]['created']));
-				list($width,$height) = getimagesize($_SERVER['DOCUMENT_ROOT'].$e[$i]['image']);?> </span> <br> <img class="main" alt=""
-					src="<?php echo $e[$i]['image']?>" width="<?php echo (width*(100/$height))?>" height="100" />
+				echo date("l jS F , Y, g:i a", strtotime($e[$i]['created']));?> 
+				</span> 
+				<br> 
+				<?php $Path = '/home/a6944098/public_html'.$e[$i]['image'];?>
+				<?php list($width,$height) = getimagesize($Path);
+						$width = ($width*(150/$height));?>
+				<img class="main" alt=""
+					src="<?php echo $e[$i]['image']?>" width="<?php echo $width;?>px" height="150px" />
 				<p>
 
 				<?php echo cutEntry($e[$i]['entry']);
@@ -151,10 +159,12 @@ else{?>
 
 				</p>
 				<form method="post" action="/simple_blog/inc/update.inc.php">
-					<fieldset><input type="submit" name="edit" class="button" value="edit" /> <input
-						type="submit" name="view" class="button" value="view" /> <input
-						type="hidden" name="url" value="<?php echo $e[$i]['url'];?>"><input
-						type="hidden" name="ipage" value="<?php echo $_GET['ipage'];?>">
+					<fieldset>
+					<?php  if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 1){ ?>
+					<input type="submit" name="edit" class="button" value="Edit" /> <?php }?> 
+					<input type="submit" name="view" class="button" value="View" /> 
+					<input type="hidden" name="url" value="<?php echo $e[$i]['url'];?>">
+					<input type="hidden" name="ipage" value="<?php echo $_GET['ipage'];?>">
 				</fieldset></form>
 
 			</div>
@@ -174,6 +184,9 @@ else{?>
 					$sloop=0;
 					$loop = $loop+abs($_GET['ipage']-3);
 				}
+				if ($_GET['ipage']>1){
+					?><a href="/simple_blog/page/">first</a><?php
+								}
 				for ($i=$sloop;$i<$loop;$i++){ ?> <a <?php if ($ipage==$i){?> id="current"<?php } 
 					if( $i == $totalPage){
 						break;
@@ -213,7 +226,8 @@ else{?>
 					<?php if ($cl['name']!=NULL){?>
 					<form method="post" action="/simple_blog/inc/update.inc.php">
 					<fieldset>
-						<input type="submit" name="delete_comment" value="delete" class="button"/>
+						<?php  if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 1){ ?>
+						<input type="submit" name="delete_comment" value="Delete" class="button"/><?php }?>
 						<input type="hidden" name="cId" value="<?php echo $cl['id'];?>"/>
 						<input type="hidden" name="url" value="<?php echo $e['url'];?>"/>
 					</fieldset>

@@ -1,5 +1,6 @@
 <?php
-
+// Start the session
+session_start();
 /*1. Verify that information was submitted via the POST method
  2. Verify that the post was pressed
  3. Verify that wall is filled out*/
@@ -10,7 +11,7 @@ $db = new PDO(DB_INFO, DB_USER, DB_PASS);
 include_once 'img.inc.php';
 include_once 'function.inc.php';
 if($_SERVER['REQUEST_METHOD']=='POST'
-&& ($_POST['post']=='post'||$_POST['post']=='edit')
+&& ($_POST['post']=='Post'||$_POST['post']=='Edit')
 && !empty($_POST['wall'])
 && !empty($_POST['title'])){
 	// Create a URL to save in the database
@@ -22,7 +23,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'
 		{
 				
 			// Instantiate the class and set a save path
-			$img = new ImageHandler("/simple_blog/img",array(600,450));
+			$img = new ImageHandler("/simple_blog/img",array(600,250));
 			// Process the file and store the returned path
 			$img_path = $img->processUploadedImage($_FILES['image']);
 		}
@@ -49,7 +50,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'
 			$stm->execute(array($_POST['url']));
 			$e = $stm->fetch();
 			if($e['image']!="/simple_blog/img/no_img.jpg"){
-				unlink($_SERVER['DOCUMENT_ROOT'].$e['image']);
+				unlink($_SERVER['/home/a6944098/public_html/'].$e['image']);
 			}
 	
 			//update new contain
@@ -80,7 +81,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'
 	
 	exit;
 }elseif($_SERVER['REQUEST_METHOD']=='POST'
-&& $_POST['del']=='delete')
+&& $_POST['del']=='Delete')
 {	// delete all comments first
 	include_once 'comments.inc.php';
 	$comments = new Comments();
@@ -89,7 +90,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'
 		WHERE url = ?
 		LIMIT 1";
 	if($e['image']!="/simple_blog/img/no_img.jpg"){
-		unlink($_SERVER['DOCUMENT_ROOT'].$e['image']);
+		unlink($_SERVER['/home/a6944098/public_html/'].$e['image']);
 	}
 	$stmt = $db->prepare($sql);
 	$stmt->execute(array($_POST['url']));
@@ -98,13 +99,13 @@ if($_SERVER['REQUEST_METHOD']=='POST'
 	exit;
 }
 elseif ($_SERVER['REQUEST_METHOD']=='POST'
-&& $_POST['edit']=='edit'){
+&& $_POST['edit']=='Edit'){
 
 	header('Location: /simple_blog/admin/edit/'.$_POST['url']);
 	exit;
 }
 elseif ($_SERVER['REQUEST_METHOD']=='POST'
-&& $_POST['view']=='view'){
+&& $_POST['view']=='View'){
 	
 	header('Location: /simple_blog/blog/'.$_POST['url']);
 	
@@ -141,7 +142,7 @@ else if($_SERVER['REQUEST_METHOD'] == 'POST'
 }
 // If the delete link is clicked on a comment, confirm it here
 else if($_SERVER['REQUEST_METHOD'] == 'POST'
-		&& $_POST['delete_comment'] == 'delete')
+		&& $_POST['delete_comment'] == 'Delete')
 {
 	// Include and instantiate the Comments class
 	include_once 'comments.inc.php';
@@ -152,7 +153,7 @@ else if($_SERVER['REQUEST_METHOD'] == 'POST'
 }
 // Go back to the right page
 else if($_SERVER['REQUEST_METHOD'] == 'POST'
-		&& $_POST['back'] == 'back')
+		&& $_POST['back'] == 'Back')
 {
 	$numb=0;
 	$numbEntry=4;
@@ -171,6 +172,56 @@ else if($_SERVER['REQUEST_METHOD'] == 'POST'
 		header('Location: ../');
 	}
 	exit;
+}
+// If an admin is being created, save it here
+else if($_SERVER['REQUEST_METHOD'] == 'POST'
+		&& $_POST['action'] == 'createuser'
+		&& !empty($_POST['username'])
+		&& !empty($_POST['password']))
+{
+	// Include database credentials and connect to the database
+	include_once 'db.inc.php';
+	$db = new PDO(DB_INFO, DB_USER, DB_PASS);
+	$sql = "INSERT INTO admin (username, password)
+	VALUES(?, SHA1(?))";
+	$stmt = $db->prepare($sql);
+	$stmt->execute(array($_POST['username'], $_POST['password']));
+	header('Location: /simple_blog/');
+	exit;
+} 
+// If a user is trying to log in, check it here
+else if($_SERVER['REQUEST_METHOD'] == 'POST'
+&& $_POST['action'] == 'login'
+&& !empty($_POST['username'])
+&& !empty($_POST['password']))
+{
+	// Include database credentials and connect to the database
+	include_once 'db.inc.php';
+	$db = new PDO(DB_INFO, DB_USER, DB_PASS);
+	$sql = "SELECT COUNT(*) AS num_users
+	FROM admin
+	WHERE username=?
+	AND password=SHA1(?)";
+	$stmt = $db->prepare($sql);
+	$stmt->execute(array($_POST['username'], $_POST['password']));
+	$response = $stmt->fetch();
+	if($response['num_users'] > 0)
+	{
+	$_SESSION['loggedin'] = 1;
+	}
+	else
+	{
+		$_SESSION['loggedin'] = NULL;
+	}
+	header('Location: /simple_blog/');
+	exit;
+}
+// If the user has chosen to log out, process it here
+else if($_GET['action'] == 'logout')
+{
+session_destroy();
+header('Location: ../');
+exit;
 }
 else
 {
