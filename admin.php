@@ -1,44 +1,45 @@
 <?php
 session_start();
+//'/home/a6944098/public_html'
+$ROOT_DIR = $_SERVER['DOCUMENT_ROOT'];
 // If the user is logged in, we can continue
 if(isset($_SESSION['loggedin']) && $_SESSION['loggedin']==1){
-include_once 'inc/function.inc.php';
-headerCreate();
-if(isset($_GET['page']))
-{
-	$page = htmlentities(strip_tags($_GET['page']));
-	if ($page=='edit'){
-		include_once 'inc/function.inc.php';
-		include_once 'inc/db.inc.php';
-		$db = new PDO(DB_INFO, DB_USER, DB_PASS);
-		$url = (isset($_GET['url'])) ? (int) $_GET['url'] : NULL;
-		$e = retrieveEntries($db,$url,$_GET['page']);
-		$e = sanitiseData($e);
-		$fulldis = array_pop($e);
-		$bvalue = "Edit";
-		$image=$e['image'];
-		$text= $e['entry'];
-		$title = $e['title'];
-		$url =  $e['url'];
-		$id = $e['id'];
-		$h1 = "Edit";
-	} elseif ($page=='create'){
-		$createAdmin = createUserForm();
-		$h1="Manage User";
+	include_once 'inc/function.inc.php';
+	if(isset($_GET['page']))
+	{
+		$page = htmlentities(strip_tags($_GET['page']));
+		if ($page=='edit'){
+			include_once 'inc/function.inc.php';
+			include_once 'inc/db.inc.php';
+			$db = new PDO(DB_INFO, DB_USER, DB_PASS);
+			$url = (isset($_GET['url'])) ? (int) $_GET['url'] : NULL;
+			$e = retrieveEntries($db,$url,$_GET['page']);
+			$e = sanitiseData($e);
+			$fulldis = array_pop($e);
+			$bvalue = "Edit";
+			$image=$e['image'];
+			$text= $e['entry'];
+			$title = $e['title'];
+			$url =  $e['url'];
+			$id = $e['id'];
+			$h1 = "Edit";
+		} elseif ($page=='create'){
+			$createAdmin = createUserForm();
+			$h1="Manage User";
+		}
 	}
-}
-else
-{
-	$page = '';
-	$text= ("What's on your mind?");
-	$bvalue = "Post";
-	$image="/simple_blog/img/no_img.jpg";
-	$title = NULL;
-	$url =  NULL;
-	$id = NULL;
-	$h1 = "New Entry";
-}
-	
+	else
+	{
+		$page = '';
+		$text= ("What's on your mind?");
+		$bvalue = "Post";
+		$image="/simple_blog/img/no_img.jpg";
+		$title = NULL;
+		$url =  NULL;
+		$id = NULL;
+		$h1 = "New Entry";
+	}
+}	
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -52,9 +53,33 @@ href="/simple_blog/feeds/rss.php" />
 
 </head>
 <body>
+<div align="center"><img src="/simple_blog/img/bg.jpg" class="bg"></div>
+	<div class="wrap">
+<div class="header">
+	<h3 class="header">tBlog</h3>
+	<div class="navi">
+		<ul class="navi" >
+			<li class="navi"> <a class="navi" href="/simple_blog/user">About Me</a>
+			<li class="navi">
+			<li class="navi"> <a class="navi" href="/simple_blog/">Blog</a>
+			<li class="navi"> 
+			<?php if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 1)
+			{
+				?><li class="navi"> <a class="navi" href="/simple_blog/admin">Post Entry</a>
+				<li class="navi"> <a class="navi" href="/simple_blog/admin/create">Manage User</a><li class="navi">  
+				<li class="navi"> <a class="navi" href="/simple_blog/inc/update.inc.php?action=logout">Logout</a><?php
+			} else {
+				?><li class="navi"> <a class="navi" href="/simple_blog/admin">Login</a><?php
+			}?>
+			
+			
+		</ul>
+	</div>
+</div>
 	<div class="body">
 	
 	<?php 
+	if(isset($_SESSION['loggedin']) && $_SESSION['loggedin']==1){
 	if ($page=='create'){
 		?>
 		<h1><?php echo $h1 ?></h1>
@@ -77,7 +102,7 @@ href="/simple_blog/feeds/rss.php" />
 							
 							<div class="upload">
 								<label>Image  <?php 
-									list($width,$height) = getimagesize('/home/a6944098/public_html/'.$image);?>  
+									list($width,$height) = getimagesize($ROOT_DIR.$image);?>  
 									<input type="file" name="image" /> </label>
 									<img class="edit" alt="" src="<?php echo $image?>" width="<?php echo ($width*(100/$height))?>" height="100" />
 									
@@ -96,28 +121,13 @@ href="/simple_blog/feeds/rss.php" />
 					</form>
 				</div>
 			</div>
-		<?php }?>
-	</div>
-</body>
-</html>
-<?php }else{
+		<?php }  }else{
 /*
 * If we get here, the user is not logged in. Display a form
 * and ask them to log in.
 */
 ?>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-	<head>
-	<meta http-equiv="Content-Type"
-	content="text/html;charset=utf-8" />
-	<link rel="stylesheet"
-	href="/simple_blog/global.css" type="text/css" />
-	<title> Please Log In </title>
-	</head>
-	<body>
-		<?php include_once 'inc/function.inc.php';
-		headerCreate();?>
-		<div class="body">
+		
 		<h1>Login</h1>
 			<div class="container">
 				<div class="entry">
@@ -138,7 +148,9 @@ href="/simple_blog/feeds/rss.php" />
 					</form>
 				</div>
 			</div>
-		</div>
-	</body>
-</html>
+		
 <?php } ?>
+	</div>
+	</div>
+</body>
+</html>

@@ -92,31 +92,7 @@ function sanitiseData($data)
 		return array_map('sanitiseData', $data);
 	}
 }
-function headerCreate (){
-	?> <div align="center"><img src="/simple_blog/img/bg.jpg" class="bg"></div>
-	<div class="wrap">
-<div class="header">
-	<h3 class="header">tBlog</h3>
-	<div class="navi">
-		<ul class="navi" >
-			<li class="navi"> <a class="navi" href="/simple_blog/user">About Me</a>
-			<li class="navi">
-			<li class="navi"> <a class="navi" href="/simple_blog/">Blog</a>
-			<li class="navi"> 
-			<?php if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 1)
-			{
-				?><li class="navi"> <a class="navi" href="/simple_blog/admin">Post Entry</a>
-				<li class="navi"> <a class="navi" href="/simple_blog/admin/create">Manage User</a><li class="navi">  
-				<li class="navi"> <a class="navi" href="/simple_blog/inc/update.inc.php?action=logout">Logout</a><?php
-			} else {
-				?><li class="navi"> <a class="navi" href="/simple_blog/admin">Login</a><?php
-			}?>
-			
-			
-		</ul>
-	</div>
-</div><?php 
-}
+
 function makeUrl($title)
 {
 $patterns = array(
