@@ -10,6 +10,7 @@ $db = new PDO(DB_INFO, DB_USER, DB_PASS);
 // Include the image handling class
 include_once 'img.inc.php';
 include_once 'function.inc.php';
+disableMagicQuote();
 if($_SERVER['REQUEST_METHOD']=='POST'
 && ($_POST['post']=='Post'||$_POST['post']=='Edit')
 && !empty($_POST['wall'])
@@ -45,12 +46,12 @@ if($_SERVER['REQUEST_METHOD']=='POST'
 		if ($img_path!=NULL){
 			//delete old image
 	
-			$sql="SELECT image FROM entry WHERE url =?";;
+			$sql="SELECT image FROM entry WHERE url =?";
 			$stm = $db->prepare($sql);
 			$stm->execute(array($_POST['url']));
 			$e = $stm->fetch();
 			if($e['image']!="/simple_blog/img/no_img.jpg"){
-				unlink($_SERVER['/home/a6944098/public_html/'].$e['image']);
+				unlink($_SERVER['DOCUMENT_ROOT'].$e['image']);
 			}
 	
 			//update new contain

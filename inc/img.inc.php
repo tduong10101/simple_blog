@@ -41,7 +41,7 @@ class ImageHandler
 		// Create the full path to the image for saving
 		$filepath = $this->save_dir . '/' . $name;
 		// Store the absolute path to move the image
-		$absolute =  $ROOT_DIR. $filepath;
+		$absolute =  $_SERVER['DOCUMENT_ROOT']. $filepath;
 		// Save the image
 		if(!move_uploaded_file($tmp, $absolute))
 		{
@@ -63,7 +63,7 @@ class ImageHandler
 	{
 		// Check for the dir
 		// Determines the path to check
-		$path = '/home/a6944098/public_html/' . $this->save_dir;
+		$path = $ROOT_DIR . $this->save_dir;
 		// Checks if the directory exists
 		if(!is_dir($path))
 		{

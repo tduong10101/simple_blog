@@ -94,7 +94,7 @@ href="/simple_blog/feeds/rss.php" />
 <body>	
 <img src="/simple_blog/img/bg.jpg" class="bg">
 <div class="wrap">
-	<div class="header">
+	<div class="header" style="position: fixed;">
 		<h3 class="header">tBlog</h3>
 		<div class="navi">
 			<ul class="navi" >

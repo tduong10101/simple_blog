@@ -1,4 +1,22 @@
 <?php
+function disableMagicQuote(){
+	if (get_magic_quotes_gpc()) {
+		$process = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST);
+		while (list($key, $val) = each($process)) {
+			foreach ($val as $k => $v) {
+				unset($process[$key][$k]);
+				if (is_array($v)) {
+					$process[$key][stripslashes($k)] = $v;
+					$process[] = &$process[$key][stripslashes($k)];
+				} else {
+					$process[$key][stripslashes($k)] = stripslashes($v);
+				}
+			}
+		}
+		unset($process);
+	}
+}
+
 function retrieveEntries($db, $url=NULL, $page='entry')
 {
 	$dis = array('main'=>0,'entry'=>1, 'invalid'=>2,'about'=>3,'noPage'=>4,'edit'=>5, 'noEntry'=>6);
@@ -103,16 +121,19 @@ $replacements = array('-', '');
 return preg_replace($patterns, $replacements, strtolower($title));
 }
 function cutEntry ($entry,$position=500){
-$str =  (substr( $entry,0 , $position ));
-					
-				if (strrpos($str, "<")>strrpos($str, "</")){
-					$str1 =  (substr( $str,0 , strrpos($str, "<")));
-				} else {
-					$str1 =  (substr( $str,0 , strrpos($str, " ") ));
-				}
-				if (strlen($str)<$position){
-					return nl2br($str);
-				}else { return nl2br($str1)."...";}
+
+	//if entry is shorter than setted main entry display full entry
+	if (strlen($entry)<$position){
+		return nl2br($entry);
+	}else { 
+		$str =  substr( $entry,0 , $position );
+		if (strrpos($str, "<a")>strrpos($str, "</")){
+			$str1 =  trim(substr( $str,0 , strrpos($str, "<a")));
+		} else {
+			$str1 =  trim( $str);
+		}
+		return nl2br($str1)."...";
+	}
 }
 function createUserForm()
 {
